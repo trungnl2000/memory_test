@@ -47,7 +47,7 @@ all_convolution_layers = get_all_conv_with_name(model)
 
 finetuned_conv_layers = dict(list(all_convolution_layers.items())[-num_of_finetune:])
 
-filter_cfgs = {"cfgs": finetuned_conv_layers, "type": "conv", "radius": 7}
+filter_cfgs = {"cfgs": finetuned_conv_layers, "type": "conv", "radius": 2}
 
 register_filter(model, filter_cfgs)
 
