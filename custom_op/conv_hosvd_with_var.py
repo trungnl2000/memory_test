@@ -73,8 +73,8 @@ class Conv2dHOSVDop_with_var(Function):
     def forward(ctx: Any, *args: Any, **kwargs: Any) -> Any:
         
 
-        pid = os.getpid()
-        process = psutil.Process(pid)
+        idd = os.getpid()
+        process_ = psutil.Process(idd)
 
         input, weight, bias, stride, dilation, padding, groups, var = args
 
@@ -88,7 +88,7 @@ class Conv2dHOSVDop_with_var(Function):
         ctx.padding = padding 
         ctx.dilation = dilation
         ctx.groups = groups
-        print(f"Memory usage for forward: {get_memory_usage(process) / (1024 ** 2)} MB")
+        print(f"Memory usage for forward: {get_memory_usage(process_) / (1024 ** 2)} MB")
 
 
         return output
