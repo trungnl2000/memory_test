@@ -12,7 +12,7 @@ from util import get_memory_usage
 
 torch.manual_seed(233)
 # Specify the batch size
-batch_size = 1
+batch_size = 128
 
 # Load the pretrained MobileNetV2 model
 model = mobilenet_v2(pretrained=True)
@@ -42,7 +42,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 device = "cpu"
 model.to(device)
 
-num_of_finetune = 1
+num_of_finetune = 10
 
 all_convolution_layers = get_all_conv_with_name(model)
 
