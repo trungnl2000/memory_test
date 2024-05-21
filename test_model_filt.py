@@ -13,6 +13,9 @@ torch.manual_seed(233)
 # Specify the batch size
 batch_size = 128
 
+pid = os.getpid()
+process = psutil.Process(pid)
+
 # Load the pretrained MobileNetV2 model
 model = mobilenet_v2(pretrained=True)
 
@@ -75,16 +78,16 @@ for inputs, labels in dataloader:
     optimizer.zero_grad()
 
     # Get the process ID of the current script
-    pid = os.getpid()
-    process = psutil.Process(pid)
+    memory_before = get_memory_usage(process) / (1024 ** 2)
 
     loss.backward()
     optimizer.step()
 
+    memory_after = get_memory_usage(process) / (1024 ** 2)
+
     # Print loss
     # print(f'Training loss: {loss.item()}')
-
-    print("________________Gradient Filter__________________")
-    print(f"Memory usage: {get_memory_usage(process) / (1024 ** 2)} MB")
+    print("________________HOSVD__________________")
+    print(f"Memory usage: {memory_after - memory_before} MB")
 
 # print('Training step completed.')
