@@ -40,7 +40,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 device = "cpu"
 model.to(device)
 
-num_of_finetune = 10
+num_of_finetune = 1
 
 all_convolution_layers = get_all_conv_with_name(model)
 finetuned_conv_layers = dict(list(all_convolution_layers.items())[-num_of_finetune:])
