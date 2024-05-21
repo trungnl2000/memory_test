@@ -12,7 +12,7 @@ from util import get_memory_usage
 
 
 # Specify the batch size
-batch_size = 128
+batch_size = 1
 
 # Load the pretrained MobileNetV2 model
 model = mobilenet_v2(pretrained=True)
