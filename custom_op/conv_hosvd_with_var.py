@@ -4,7 +4,9 @@ from typing import Any
 from torch.nn.functional import conv2d, avg_pool2d
 import torch.nn as nn
 from math import ceil
-
+import os
+import psutil
+from util import get_memory_usage
 
 ###### HOSVD base on variance #############
 
@@ -69,9 +71,7 @@ def restore_hosvd(S, u0, u1, u2, u3):
 class Conv2dHOSVDop_with_var(Function):
     @staticmethod
     def forward(ctx: Any, *args: Any, **kwargs: Any) -> Any:
-        import os
-        import psutil
-        from util import get_memory_usage
+        
 
         pid = os.getpid()
         process = psutil.Process(pid)
@@ -96,6 +96,9 @@ class Conv2dHOSVDop_with_var(Function):
     @staticmethod
     def backward(ctx: Any, *grad_outputs: Any) -> Any:
 
+        pid = os.getpid()
+        process = psutil.Process(pid)
+
         S, u0, u1, u2, u3, weight, bias = ctx.saved_tensors
         input = restore_hosvd(S, u0, u1, u2, u3)
 
@@ -114,6 +117,8 @@ class Conv2dHOSVDop_with_var(Function):
             grad_weight = nn.grad.conv2d_weight(input, weight.shape, grad_output, stride, padding, dilation, groups)
         if bias is not None and ctx.needs_input_grad[2]:
             grad_bias = grad_output.sum((0,2,3)).squeeze(0)
+
+        print(f"Memory usage for backward: {get_memory_usage(process) / (1024 ** 2)} MB")
         return grad_input, grad_weight, grad_bias, None, None, None, None, None
 
 class Conv2dHOSVD_with_var(nn.Conv2d):
