@@ -69,6 +69,13 @@ def restore_hosvd(S, u0, u1, u2, u3):
 class Conv2dHOSVDop_with_var(Function):
     @staticmethod
     def forward(ctx: Any, *args: Any, **kwargs: Any) -> Any:
+        import os
+        import psutil
+        from util import get_memory_usage
+
+        pid = os.getpid()
+        process = psutil.Process(pid)
+
         input, weight, bias, stride, dilation, padding, groups, var = args
 
         output = conv2d(input, weight, bias, stride, padding, dilation=dilation, groups=groups)
@@ -81,6 +88,8 @@ class Conv2dHOSVDop_with_var(Function):
         ctx.padding = padding 
         ctx.dilation = dilation
         ctx.groups = groups
+        print(f"Memory usage for forward: {get_memory_usage(process) / (1024 ** 2)} MB")
+
 
         return output
 
