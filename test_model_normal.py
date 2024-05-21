@@ -8,7 +8,7 @@ from util import get_all_conv_with_name
 import psutil
 import os
 from util import get_memory_usage
-
+torch.manual_seed(233)
 # Specify the batch size
 batch_size = 1
 
